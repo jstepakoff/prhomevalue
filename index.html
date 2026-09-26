@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Porter Ranch Home Value | Josh Stepakoff</title>
+  <meta name="description" content="See the estimated value of your Porter Ranch home, based on recent model-match sales.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <img class="brand-logo" src="logo.png" alt="Josh Stepakoff. Real Estate">
+  </header>
+
+  <main class="container">
+    <div id="loading" class="state-block">
+      <p class="loading-text">Pulling your home's value estimate&hellip;</p>
+    </div>
+
+    <div id="error" class="state-block" hidden>
+      <h1>This link does not look valid.</h1>
+      <p class="lede">It may have been scanned incorrectly or it is no longer active. Scan the QR code again, or reach out and I will look up your home's value directly.</p>
+      <p class="contact-line">Call or text <a href="tel:+18187237848">818-723-7848</a> or visit <a href="https://joshstepakoff.com">joshstepakoff.com</a>.</p>
+    </div>
+
+    <div id="content" hidden>
+      <section class="hero">
+        <h1>What is your Porter Ranch home worth?</h1>
+        <p class="address" id="property-address"></p>
+        <p class="stats-line" id="property-stats"></p>
+      </section>
+
+      <section class="value-block" aria-label="Estimated home value">
+        <p class="value-range" id="value-range"></p>
+        <p class="value-point" id="value-point"></p>
+        <p class="value-note">Based on recent model-match sales of homes like yours in Porter Ranch.</p>
+      </section>
+
+      <section class="comps">
+        <h2>Recent model-match sales near you</h2>
+        <table id="comps-table">
+          <tbody id="comps-body"></tbody>
+        </table>
+      </section>
+
+      <section class="lead" aria-label="Get your full home value report">
+        <h2>Want the full picture?</h2>
+        <p class="lead-copy">Send me your info and I will put together a detailed, hand-built value report for your home. No cost, no pressure.</p>
+        <form id="lead-form" novalidate>
+          <div class="field">
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="name" autocomplete="name" required>
+            <p class="field-error" id="name-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" autocomplete="tel" required>
+            <p class="field-error" id="phone-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required>
+            <p class="field-error" id="email-error" hidden></p>
+          </div>
+          <button type="submit" class="btn-submit" id="submit-btn">Send me my report</button>
+          <p class="form-error" id="form-error" hidden></p>
+        </form>
+        <div id="form-success" hidden>
+          <h2 id="success-heading"></h2>
+          <p>Josh will reach out shortly with your full report. Prefer to talk now? Call or text <a href="tel:+18187237848">818-723-7848</a>.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-id">
+      <img class="headshot" src="headshot.jpg" alt="Josh Stepakoff">
+      <div class="footer-id-text">
+        <p class="footer-signature">Josh Stepakoff | <a href="tel:+18187237848">818-723-7848</a> | <a href="https://joshstepakoff.com">joshstepakoff.com</a></p>
+        <p class="footer-title">E.V.P. of Operations | Realtor</p>
+        <p class="footer-dre">DRE #02045840</p>
+      </div>
+    </div>
+    <p class="footer-disclaimer">Information deemed reliable but not guaranteed. If your home is currently listed with another broker, please disregard this ad as it is not our intention to solicit the listings of other brokers. This representation is based in whole or in part on data supplied by the Association of Realtors or its multiple listing service. Neither the association nor its MLS guarantees or is in any way responsible for its accuracy. The sales statistics contained herein are for informational purposes only and reflect the activity of all Realtors and are not the listings and sales of Joshua Stepakoff and Pinnacle Estate Properties, Inc. alone.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
