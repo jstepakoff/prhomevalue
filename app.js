@@ -1,4 +1,4 @@
-const API_BASE = "https://api.prhomevalue.com";
+const API_BASE = "https://pr-homevalue-leads.joshstepakoff-22d.workers.dev";
 
 const DATA_URL = "data/households.json";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
