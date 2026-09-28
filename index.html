@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Your Porter Ranch Home Value | Josh Stepakoff</title>
-  <meta name="description" content="See the estimated value of your Porter Ranch home, based on recent model-match sales.">
+  <title>Porter Ranch Home Values | Josh Stepakoff</title>
+  <meta name="description" content="Find out what your Porter Ranch home is worth. Request a free, hand-built home valuation from Josh Stepakoff, Realtor with Pinnacle Estate Properties.">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,6 +21,54 @@
       <h1>This link does not look valid.</h1>
       <p class="lede">It may have been scanned incorrectly or it is no longer active. Scan the QR code again, or reach out and I will look up your home's value directly.</p>
       <p class="contact-line">Call or text <a href="tel:+18187237848">818-723-7848</a> or visit <a href="https://joshstepakoff.com">joshstepakoff.com</a>.</p>
+    </div>
+
+    <div id="welcome" hidden>
+      <section class="hero">
+        <h1>What is your Porter Ranch home worth?</h1>
+        <p class="lede">Welcome. If you found your way here, you probably want a straight answer on your home's value, not a generic online estimate. I put together hand-built, no-cost home value reports for Porter Ranch homeowners, based on recent model-match sales near you.</p>
+      </section>
+
+      <section class="lead" aria-label="Request your free home valuation">
+        <h2>Request your free home valuation</h2>
+        <p class="lead-copy">Send me your info and I will prepare a detailed value report for your home. No cost, no pressure.</p>
+        <form id="welcome-form" novalidate>
+          <div class="field">
+            <label for="w-name">Full name</label>
+            <input type="text" id="w-name" name="name" autocomplete="name" required>
+            <p class="field-error" id="w-name-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="w-address">Property address</label>
+            <input type="text" id="w-address" name="address" autocomplete="street-address" placeholder="Street address, Porter Ranch, CA" required>
+            <p class="field-error" id="w-address-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="w-phone">Phone</label>
+            <input type="tel" id="w-phone" name="phone" autocomplete="tel" required>
+            <p class="field-error" id="w-phone-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="w-email">Email</label>
+            <input type="email" id="w-email" name="email" autocomplete="email" required>
+            <p class="field-error" id="w-email-error" hidden></p>
+          </div>
+          <button type="submit" class="btn-submit" id="w-submit-btn">Send me my valuation</button>
+          <p class="form-error" id="w-form-error" hidden></p>
+        </form>
+        <div id="w-form-success" hidden>
+          <h2 id="w-success-heading"></h2>
+          <p>Josh will reach out shortly with your full report. Prefer to talk now? Call or text <a href="tel:+18187237848">818-723-7848</a>.</p>
+        </div>
+      </section>
+
+      <section class="about" aria-label="About Josh Stepakoff">
+        <img class="about-headshot" src="headshot.jpg" alt="Josh Stepakoff">
+        <h2>Meet Josh Stepakoff</h2>
+        <p>I'm a Realtor with Pinnacle Estate Properties and I specialize in Porter Ranch. I send these home value reports because I want homeowners here to have a real read on their market, not just an algorithm's guess.</p>
+        <p>I'm a resource for all things real estate, from remodel opinions to contractor names, not just buying and selling. If you ever have a question about your home or the neighborhood, reach out.</p>
+        <p class="about-contact"><strong>Josh Stepakoff</strong> | <a href="tel:+18187237848">818-723-7848</a> | <a href="https://joshstepakoff.com">joshstepakoff.com</a><br>E.V.P. of Operations | Realtor | DRE #02045840</p>
+      </section>
     </div>
 
     <div id="content" hidden>
