@@ -1,11 +1,101 @@
-const API_BASE = "https://pr-homevalue-leads.joshstepakoff-22d.workers.dev";
+const API_BASE = "https://api.prhomevalue.com";
 
 const DATA_URL = "data/households.json";
+
+// Extra letter recipients (not farm properties): their records live here
+// instead of households.json so their QR codes resolve.
+const EXTRA_HOUSEHOLDS = {
+  "AUulS0bu51": {
+    "token": "AUulS0bu51",
+    "address": "19155 Doral Place",
+    "city": "Porter Ranch",
+    "zip": "91326",
+    "apn": "EXTRA-0001",
+    "beds": 3,
+    "baths": 2,
+    "sqft": 1894,
+    "comps": [
+      {
+        "address": "19343 Pauma Valley",
+        "beds": 3,
+        "baths": 2,
+        "sqft": 1857,
+        "sold_price": 1150000,
+        "sold_date": "2026-06-22",
+        "price_per_sqft": 619
+      },
+      {
+        "address": "11355 Pala Mesa",
+        "beds": 3,
+        "baths": 2,
+        "sqft": 1857,
+        "sold_price": 1175000,
+        "sold_date": "2026-02-27",
+        "price_per_sqft": 633
+      },
+      {
+        "address": "11431 Porter Valley",
+        "beds": 3,
+        "baths": 2,
+        "sqft": 1961,
+        "sold_price": 1436000,
+        "sold_date": "2026-03-27",
+        "price_per_sqft": 732
+      }
+    ],
+    "value_low": 1110000,
+    "value_high": 1255000,
+    "value_point": 1183458
+  },
+  "3g5eo8SPe9": {
+    "token": "3g5eo8SPe9",
+    "address": "19155 Doral Place",
+    "city": "Porter Ranch",
+    "zip": "91326",
+    "apn": "EXTRA-0002",
+    "beds": 3,
+    "baths": 2,
+    "sqft": 1894,
+    "comps": [
+      {
+        "address": "19343 Pauma Valley",
+        "beds": 3,
+        "baths": 2,
+        "sqft": 1857,
+        "sold_price": 1150000,
+        "sold_date": "2026-06-22",
+        "price_per_sqft": 619
+      },
+      {
+        "address": "11355 Pala Mesa",
+        "beds": 3,
+        "baths": 2,
+        "sqft": 1857,
+        "sold_price": 1175000,
+        "sold_date": "2026-02-27",
+        "price_per_sqft": 633
+      },
+      {
+        "address": "11431 Porter Valley",
+        "beds": 3,
+        "baths": 2,
+        "sqft": 1961,
+        "sold_price": 1436000,
+        "sold_date": "2026-03-27",
+        "price_per_sqft": 732
+      }
+    ],
+    "value_low": 1110000,
+    "value_high": 1255000,
+    "value_point": 1183458
+  }
+};
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const els = {
   loading: document.getElementById("loading"),
   error: document.getElementById("error"),
+  welcome: document.getElementById("welcome"),
   content: document.getElementById("content"),
   address: document.getElementById("property-address"),
   stats: document.getElementById("property-stats"),
@@ -23,7 +113,24 @@ const els = {
   nameError: document.getElementById("name-error"),
   phoneError: document.getElementById("phone-error"),
   emailError: document.getElementById("email-error"),
+  wForm: document.getElementById("welcome-form"),
+  wSubmitBtn: document.getElementById("w-submit-btn"),
+  wFormError: document.getElementById("w-form-error"),
+  wFormSuccess: document.getElementById("w-form-success"),
+  wSuccessHeading: document.getElementById("w-success-heading"),
+  wName: document.getElementById("w-name"),
+  wAddress: document.getElementById("w-address"),
+  wPhone: document.getElementById("w-phone"),
+  wEmail: document.getElementById("w-email"),
+  wNameError: document.getElementById("w-name-error"),
+  wAddressError: document.getElementById("w-address-error"),
+  wPhoneError: document.getElementById("w-phone-error"),
+  wEmailError: document.getElementById("w-email-error"),
 };
+
+// Fixed token for leads that start on the public welcome page (no letter
+// token). The worker recognizes it and tags these leads separately.
+const HOMEPAGE_TOKEN = "HOME000000";
 
 let household = null;
 let token = "";
@@ -51,8 +158,97 @@ function formatDate(raw) {
 
 function showError() {
   els.loading.hidden = true;
+  els.welcome.hidden = true;
   els.content.hidden = true;
   els.error.hidden = false;
+}
+
+function showWelcome() {
+  els.loading.hidden = true;
+  els.error.hidden = true;
+  els.content.hidden = true;
+  els.welcome.hidden = false;
+  els.wForm.addEventListener("submit", submitWelcomeLead);
+}
+
+function validateWelcome() {
+  let ok = true;
+  const name = els.wName.value.trim();
+  const address = els.wAddress.value.trim();
+  const phone = els.wPhone.value.trim();
+  const email = els.wEmail.value.trim();
+
+  if (!name) {
+    fieldError(els.wName, els.wNameError, "Please enter your full name.");
+    ok = false;
+  } else {
+    fieldError(els.wName, els.wNameError, "");
+  }
+
+  if (!address) {
+    fieldError(els.wAddress, els.wAddressError, "Please enter your property address.");
+    ok = false;
+  } else {
+    fieldError(els.wAddress, els.wAddressError, "");
+  }
+
+  const digits = phone.replace(/\D/g, "");
+  if (!phone) {
+    fieldError(els.wPhone, els.wPhoneError, "Please enter your phone number.");
+    ok = false;
+  } else if (digits.length < 10) {
+    fieldError(els.wPhone, els.wPhoneError, "Please enter a valid 10-digit phone number.");
+    ok = false;
+  } else {
+    fieldError(els.wPhone, els.wPhoneError, "");
+  }
+
+  if (!email) {
+    fieldError(els.wEmail, els.wEmailError, "Please enter your email address.");
+    ok = false;
+  } else if (!EMAIL_RE.test(email)) {
+    fieldError(els.wEmail, els.wEmailError, "Please enter a valid email address.");
+    ok = false;
+  } else {
+    fieldError(els.wEmail, els.wEmailError, "");
+  }
+
+  return ok;
+}
+
+async function submitWelcomeLead(e) {
+  e.preventDefault();
+  els.wFormError.hidden = true;
+  if (!validateWelcome()) return;
+
+  els.wSubmitBtn.disabled = true;
+  els.wSubmitBtn.textContent = "Sending...";
+
+  const payload = {
+    token: HOMEPAGE_TOKEN,
+    name: els.wName.value.trim(),
+    phone: els.wPhone.value.trim(),
+    email: els.wEmail.value.trim(),
+    property_address: els.wAddress.value.trim(),
+  };
+
+  try {
+    const res = await fetch(API_BASE + "/lead", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error("bad status");
+    const firstName = payload.name.split(/\s+/)[0];
+    els.wSuccessHeading.textContent = "Thanks, " + firstName + ".";
+    els.wForm.hidden = true;
+    els.wFormSuccess.hidden = false;
+  } catch (err) {
+    els.wFormError.textContent = "Something went wrong sending your request. Please try again, or call 818-723-7848.";
+    els.wFormError.hidden = false;
+    els.wSubmitBtn.disabled = false;
+    els.wSubmitBtn.textContent = "Send me my valuation";
+  }
 }
 
 function render(rec) {
@@ -178,14 +374,14 @@ async function submitLead(e) {
 async function init() {
   token = new URLSearchParams(window.location.search).get("h") || "";
   if (!token) {
-    showError();
+    showWelcome();
     return;
   }
   try {
     const res = await fetch(DATA_URL);
     if (!res.ok) throw new Error("fetch failed");
     const data = await res.json();
-    const rec = data && data[token];
+    const rec = (data && data[token]) || EXTRA_HOUSEHOLDS[token];
     if (!rec || !rec.address || rec.value_low == null || rec.value_high == null || rec.value_point == null) {
       showError();
       return;
