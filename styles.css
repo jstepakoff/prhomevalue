@@ -36,9 +36,9 @@ a { color: var(--teal); }
   text-align: center;
   padding: 28px 20px 8px;
 }
-.brand-logo {
-  max-width: 260px;
-  width: 70%;
+.header-logos { display: flex; align-items: center; justify-content: center; gap: 28px; flex-wrap: wrap; } .broker-logo { max-width: 190px; width: 48%; height: auto; } .brand-logo {
+  max-width: 220px;
+  width: 55%;
   height: auto;
 }
 
